@@ -6,6 +6,17 @@ namespace Project
     [TestClass]
     public class Tests
     {
+        [TestInitialize]
+        public void Init()
+        {
+            if (Solution.ExecBook != null)
+                Solution.ExecBook.Clear();
+            if (Solution.SellBook != null)
+                Solution.SellBook.Clear();
+            if (Solution.BuyBook != null)
+                Solution.BuyBook.Clear();
+        }
+
         [TestMethod]
         public void BasicRegistration()
         {
@@ -40,6 +51,9 @@ namespace Project
         {
             Solution.RegisterOrder("AAA BUY 1 10.00");
             Solution.RegisterOrder("AAA SELL 1 10.00");
+            Solution.Execute();
+            Check.That(Solution.ExecBook[0].Display()).Equals("AAA 1 10.00");
+            Check.That(Solution.ExecBook.Count).Equals(1);
         }
 
         [TestMethod]
@@ -48,6 +62,9 @@ namespace Project
             Solution.RegisterOrder("AAA BUY 1 10.00");
             Solution.RegisterOrder("BBB SELL 1 10.00");
             Solution.RegisterOrder("BBB BUY 1 10.00");
+            Solution.Execute();
+            Check.That(Solution.ExecBook[0].Display()).Equals("BBB 1 10.00");
+            Check.That(Solution.ExecBook.Count).Equals(1);
         }
 
         [TestMethod]
@@ -55,6 +72,8 @@ namespace Project
         {
             Solution.RegisterOrder("ABC BUY 1 9.00");
             Solution.RegisterOrder("ABC SELL 1 10.0");
+            Solution.Execute();
+            Check.That(Solution.ExecBook).IsEmpty();
         }
 
         [TestMethod]
