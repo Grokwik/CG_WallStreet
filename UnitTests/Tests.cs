@@ -63,8 +63,8 @@ namespace Project
             Solution.RegisterOrder("BBB SELL 1 10.00");
             Solution.RegisterOrder("BBB BUY 1 10.00");
             Solution.Execute();
-            Check.That(Solution.ExecBook[0].Display()).Equals("BBB 1 10.00");
             Check.That(Solution.ExecBook.Count).Equals(1);
+            Check.That(Solution.ExecBook[0].Display()).Equals("BBB 1 10.00");
         }
 
         [TestMethod]
@@ -90,6 +90,17 @@ namespace Project
             Solution.RegisterOrder("ABC BUY 3 23.45");
             Solution.RegisterOrder("BBC BUY 10 13.50");
             Solution.RegisterOrder("BBC SELL 100 13.45");
+            Solution.Execute();
+            Check.That(Solution.ExecBook.Count).Equals(9);
+            Check.That(Solution.ExecBook[0].Display()).Equals("ABC 8 23.50");
+            Check.That(Solution.ExecBook[1].Display()).Equals("ABC 2 23.50");
+            Check.That(Solution.ExecBook[2].Display()).Equals("ABC 3 23.50");
+            Check.That(Solution.ExecBook[3].Display()).Equals("ABC 7 23.50");
+            Check.That(Solution.ExecBook[4].Display()).Equals("ABC 3 23.45");
+            Check.That(Solution.ExecBook[5].Display()).Equals("BBC 10 13.50");
+            Check.That(Solution.ExecBook[6].Display()).Equals("BBC 8 13.50");
+            Check.That(Solution.ExecBook[7].Display()).Equals("BBC 12 13.50");
+            Check.That(Solution.ExecBook[8].Display()).Equals("BBC 10 13.50");
         }
     }
 }
