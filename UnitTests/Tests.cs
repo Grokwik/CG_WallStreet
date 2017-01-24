@@ -101,6 +101,126 @@ namespace Project
             Check.That(Solution.ExecBook[6].Display()).Equals("BBC 8 13.50");
             Check.That(Solution.ExecBook[7].Display()).Equals("BBC 12 13.50");
             Check.That(Solution.ExecBook[8].Display()).Equals("BBC 10 13.50");
+            /*
+                ABC BUY 10 23.50    ABC SELL 8 23.50        8
+                reste 2             ABC SELL 5 23.50        2
+                ABC BUY 10 23.50    reste 3                 3
+                reste 7             ABC SELL 10 23.45       7
+                ABC BUY 3 23.45     reste 3                 3
+
+                BBC BUY 10 13.50    BBC SELL 100 13.45      10
+                BBC BUY 8 13.50                             8
+                BBC BUY 12 13.50                            12
+                BBC BUY 10 13.50                            10
+            */
+        }
+
+        [TestMethod]
+        public void BusyDay()
+        {
+            #region inputs
+            Solution.RegisterOrder("AAA BUY 10 12.00");
+            Solution.RegisterOrder("ABC BUY 10 11.50");
+            Solution.RegisterOrder("DFE BUY 1 10.00");
+            Solution.RegisterOrder("ABC BUY 8 11.25");
+            Solution.RegisterOrder("DEF BUY 10 11.25");
+            Solution.RegisterOrder("AAB BUY 8 11.00");
+            Solution.RegisterOrder("ABC BUY 8 11.25");
+            Solution.RegisterOrder("AAB BUY 9 11.50");
+            Solution.RegisterOrder("AAB BUY 12 11.25");
+            Solution.RegisterOrder("AAB BUY 12 11.00");
+            Solution.RegisterOrder("AAB BUY 9 10.00");
+            Solution.RegisterOrder("DEF BUY 1 11.00");
+            Solution.RegisterOrder("AAA BUY 10 11.25");
+            Solution.RegisterOrder("DCE BUY 1 11.75");
+            Solution.RegisterOrder("DFE BUY 11 11.50");
+            Solution.RegisterOrder("DEF BUY 1 11.50");
+            Solution.RegisterOrder("ABC BUY 8 11.00");
+            Solution.RegisterOrder("DCE BUY 12 11.50");
+            Solution.RegisterOrder("DCE BUY 9 12.00");
+            Solution.RegisterOrder("DCE BUY 9 11.75");
+            Solution.RegisterOrder("AAA BUY 12 11.50");
+            Solution.RegisterOrder("AAB BUY 12 11.75");
+            Solution.RegisterOrder("ABC BUY 12 10.00");
+            Solution.RegisterOrder("DEF BUY 11 12.00");
+            Solution.RegisterOrder("DFE BUY 11 11.25");
+            Solution.RegisterOrder("ABC BUY 12 12.00");
+            Solution.RegisterOrder("DEF BUY 10 11.50");
+            Solution.RegisterOrder("AAB BUY 9 11.50");
+            Solution.RegisterOrder("DFE BUY 8 12.00");
+            Solution.RegisterOrder("AAA BUY 11 11.75");
+            Solution.RegisterOrder("DCE BUY 9 11.25");
+            Solution.RegisterOrder("DCE BUY 12 11.25");
+            Solution.RegisterOrder("DCE BUY 11 11.50");
+            Solution.RegisterOrder("DFE BUY 8 11.75");
+            Solution.RegisterOrder("DCE BUY 1 11.00");
+            Solution.RegisterOrder("AAA BUY 8 10.00");
+            Solution.RegisterOrder("DFE BUY 12 10.00");
+            Solution.RegisterOrder("AAB BUY 8 10.00");
+            Solution.RegisterOrder("AAA BUY 8 10.00");
+            Solution.RegisterOrder("ABC BUY 1 11.00");
+            Solution.RegisterOrder("AAA BUY 8 11.25");
+            Solution.RegisterOrder("AAA BUY 8 11.75");
+            Solution.RegisterOrder("DCE BUY 8 11.25");
+            Solution.RegisterOrder("DFE BUY 8 12.00");
+            Solution.RegisterOrder("DCE BUY 11 10.00");
+            Solution.RegisterOrder("DEF BUY 10 11.25");
+            Solution.RegisterOrder("DEF BUY 1 11.75");
+            Solution.RegisterOrder("ABC BUY 9 11.00");
+            Solution.RegisterOrder("DCE BUY 8 11.75");
+            Solution.RegisterOrder("DEF BUY 8 11.25");
+            Solution.RegisterOrder("DFE BUY 10 10.00");
+            Solution.RegisterOrder("DFE BUY 10 10.00");
+            Solution.RegisterOrder("ABC BUY 10 12.00");
+            Solution.RegisterOrder("AAB BUY 8 11.00");
+            Solution.RegisterOrder("DEF BUY 11 11.75");
+            Solution.RegisterOrder("AAA BUY 10 11.25");
+            Solution.RegisterOrder("ABC SELL 11 11.00");
+            Solution.RegisterOrder("DFE SELL 10 11.25");
+            Solution.RegisterOrder("AAB SELL 8 12.00");
+            Solution.RegisterOrder("AAA SELL 10 11.00");
+            Solution.RegisterOrder("AAB SELL 1 10.00");
+            Solution.RegisterOrder("DFE SELL 11 11.00");
+            Solution.RegisterOrder("DCE SELL 9 11.50");
+            Solution.RegisterOrder("DFE SELL 1 12.00");
+            Solution.RegisterOrder("DEF SELL 8 11.25");
+            Solution.RegisterOrder("DCE SELL 1 11.25");
+            Solution.RegisterOrder("DFE SELL 1 11.25");
+            Solution.RegisterOrder("DEF SELL 9 12.00");
+            Solution.RegisterOrder("ABC SELL 9 11.75");
+            Solution.RegisterOrder("DCE SELL 12 11.50");
+            Solution.RegisterOrder("DFE SELL 10 11.50");
+            Solution.RegisterOrder("DEF SELL 12 11.75");
+            Solution.RegisterOrder("DCE SELL 9 11.25");
+            Solution.RegisterOrder("DFE SELL 8 11.00");
+            Solution.RegisterOrder("AAB SELL 8 12.00");
+            Solution.RegisterOrder("DFE SELL 10 12.00");
+            Solution.RegisterOrder("DFE SELL 12 11.75");
+            Solution.RegisterOrder("ABC SELL 10 11.25");
+            Solution.RegisterOrder("ABC SELL 11 11.25");
+            Solution.RegisterOrder("AAA SELL 9 11.50");
+            Solution.RegisterOrder("DCE SELL 1 11.75");
+            Solution.RegisterOrder("DEF SELL 11 11.25");
+            Solution.RegisterOrder("AAB SELL 8 10.00");
+            Solution.RegisterOrder("AAB SELL 1 11.25");
+            Solution.RegisterOrder("ABC SELL 11 12.00");
+            Solution.RegisterOrder("DFE SELL 12 11.25");
+            Solution.RegisterOrder("DCE SELL 12 11.25");
+            Solution.RegisterOrder("DEF SELL 11 11.50");
+            Solution.RegisterOrder("DCE SELL 9 11.75");
+            Solution.RegisterOrder("AAB SELL 11 12.00");
+            Solution.RegisterOrder("AAA SELL 10 10.00");
+            Solution.RegisterOrder("DEF SELL 1 11.00");
+            Solution.RegisterOrder("AAB SELL 11 11.75");
+            Solution.RegisterOrder("AAA SELL 9 10.00");
+            Solution.RegisterOrder("ABC SELL 10 11.00");
+            Solution.RegisterOrder("ABC SELL 8 11.50");
+            Solution.RegisterOrder("AAA SELL 12 11.25");
+            Solution.RegisterOrder("DFE SELL 9 12.00");
+            Solution.RegisterOrder("DEF SELL 12 12.00");
+            Solution.RegisterOrder("ABC SELL 11 12.00");
+            #endregion
+            
         }
     }
 }

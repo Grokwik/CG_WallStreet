@@ -80,7 +80,7 @@ namespace Project
                                  select o;
                 var cSellOrders = from o in SellBook
                                   where o.Symbol == s
-                                  orderby o.Price ascending
+                                  orderby o.Price descending
                                   select o;
                 var BO = cBuyOrders.FirstOrDefault();
                 BuyBook.Remove(BO);
@@ -88,33 +88,34 @@ namespace Project
                 SellBook.Remove(SO);
                 while (BO != null && SO != null)
                 {
-                    if (BO.Price == SO.Price)
+                    if (BO.Price < SO.Price)
+                        break;
+
+                    if (BO.Price > SO.Price)
+                        break;
+
+                    var tradedQty = Math.Min(BO.Qty, SO.Qty);
+                    ExecBook.Add(new Order(s, tradedQty, BO.Price));
+                    var remainingQty = SO.Qty - BO.Qty;
+                    if (remainingQty < 0)
                     {
-                        var tradedQty = Math.Min(BO.Qty, SO.Qty);
-                        ExecBook.Add(new Order(s, tradedQty, BO.Price));
-                        var remainingQty = SO.Qty - BO.Qty;
-                        if (remainingQty < 0)
-                        {
-                            BO.Qty = -remainingQty;
-                            SO = cSellOrders.FirstOrDefault();
-                            SellBook.Remove(SO);
-                        }
-                        else if (remainingQty > 0)
-                        {
-                            SO.Qty = remainingQty;
-                            BO = cBuyOrders.FirstOrDefault();
-                            BuyBook.Remove(BO);
-                        }
-                        else
-                        {
-                            BO = cBuyOrders.FirstOrDefault();
-                            SO = cSellOrders.FirstOrDefault();
-                            BuyBook.Remove(BO);
-                            SellBook.Remove(SO);
-                        }
+                        BO.Qty = -remainingQty;
+                        SO = cSellOrders.FirstOrDefault();
+                        SellBook.Remove(SO);
+                    }
+                    else if (remainingQty > 0)
+                    {
+                        SO.Qty = remainingQty;
+                        BO = cBuyOrders.FirstOrDefault();
+                        BuyBook.Remove(BO);
                     }
                     else
-                        break;
+                    {
+                        BO = cBuyOrders.FirstOrDefault();
+                        SO = cSellOrders.FirstOrDefault();
+                        BuyBook.Remove(BO);
+                        SellBook.Remove(SO);
+                    }
                 }
             }
         }
